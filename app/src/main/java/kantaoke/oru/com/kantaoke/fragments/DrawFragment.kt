@@ -11,6 +11,7 @@ import android.widget.TextView
 import kantaoke.oru.com.kantaoke.KantaokeApplication
 import kantaoke.oru.com.kantaoke.R
 import kantaoke.oru.com.kantaoke.SongViewModel
+import kantaoke.oru.com.kantaoke.data.Song
 import java.util.*
 
 /**
@@ -36,14 +37,19 @@ class DrawFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this.activity).get(SongViewModel::class.java)
 
+        viewModel.songs.observe(this.activity, android.arch.lifecycle.Observer<MutableList<Song>> {
+            val drawnSong = it!!.filter { it.isAlreadyDrawn }.maxBy { it.dateDrawn }
+            drawnSongTitleView.text = drawnSong?.title
+            drawnSongArtistView.text = drawnSong?.artist
+        })
+
         drawButton.setOnClickListener {
             val drawnSongs = viewModel.getItems().value!!.filter { !it.isAlreadyDrawn }
             if (drawnSongs.isNotEmpty()){
                 val drawnSong = drawnSongs.getRandomElement()
                 drawnSong.isAlreadyDrawn = true
+                drawnSong.dateDrawn = Date()
                 viewModel.updateItem(drawnSong)
-                drawnSongTitleView.text = drawnSong.title
-                drawnSongArtistView.text = drawnSong.artist
             } else {
                 drawnSongTitleView.text = "Hai estratto tutte le canzoni!"
                 drawnSongArtistView.text = ""

@@ -18,6 +18,7 @@ import kantaoke.oru.com.kantaoke.R
 import kantaoke.oru.com.kantaoke.SongViewModel
 import kantaoke.oru.com.kantaoke.adapters.SongAdapter
 import kantaoke.oru.com.kantaoke.data.Song
+import java.util.*
 
 /**
  * Created by Oru on 19/01/2018.
@@ -53,13 +54,6 @@ class SongListFragment : Fragment() {
             songsView.adapter = mAdapter
         })
 
-        /* task {
-             songs = app.db.songDao().all.toMutableList()
-         } successUi {
-             mAdapter = SongAdapter(this.context, songs)
-             songsView.adapter = mAdapter
-         }*/
-
         fab = view.findViewById(R.id.add_song_fab)
         fab.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(this.context)
@@ -72,6 +66,7 @@ class SongListFragment : Fragment() {
                 val newSong = Song()
                 newSong.title = titleInput.text.toString()
                 newSong.artist = artistInput.text.toString()
+                newSong.dateModified = Date()
                 viewModel.addItem(newSong)
             }
             dialogBuilder.setNegativeButton("Annulla") { dialog, i -> }
@@ -84,15 +79,10 @@ class SongListFragment : Fragment() {
             dialogBuilder.setPositiveButton("Sì") { dialog, whichButton ->
                 val songs = viewModel.getItems().value!!.filter { it.isAlreadyDrawn }.toMutableList()
                 if (songs.isNotEmpty()){
-                    songs.forEach { it.isAlreadyDrawn = false }
+                    songs.forEach { it.isAlreadyDrawn = false
+                        it.dateDrawn = null}
                     viewModel.updateAllItems(songs)
                 }
-/*                task {
-                    songs.forEach { it.isAlreadyDrawn = false }
-                    app.db.songDao().updateAllSongs(songs)
-                    return@task app.db.songDao().all.filter { it.isAlreadyDrawn }.toMutableList()
-                } successUi {
-                    mAdapter.refreshSongs(it) }*/
             }
             dialogBuilder.setNegativeButton("No") { dialog, i -> }
             dialogBuilder.show()

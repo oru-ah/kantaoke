@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Date;
+
 /**
  * Created by Oru on 19/01/2018.
  */
@@ -19,6 +21,10 @@ public class Song {
 
     @ColumnInfo(name = "song_artist")
     public String artist;
+
+    public Date dateModified;
+
+    public Date dateDrawn;
 
     public boolean isAlreadyDrawn;
 }
