@@ -24,7 +24,7 @@ import java.util.*
  * Created by Oru on 19/01/2018.
  */
 
-class SongListFragment : Fragment() {
+class SongListFragment : Fragment(), SongAdapter.ResetListener {
 
     lateinit var mAdapter: SongAdapter
     lateinit var fab: FloatingActionButton
@@ -44,7 +44,7 @@ class SongListFragment : Fragment() {
 
         app = this.activity.application as KantaokeApplication
 
-        mAdapter = SongAdapter(this.context, mutableListOf<Song>())
+        mAdapter = SongAdapter(this.context, mutableListOf<Song>(), this)
         songsView.adapter = mAdapter
 
         viewModel = ViewModelProviders.of(this.activity).get(SongViewModel::class.java)
@@ -91,4 +91,10 @@ class SongListFragment : Fragment() {
         return view
     }
 
+    override fun onResetClick(view: View) {
+        var song = viewModel.getItems().value!!.find { it.id == view.tag }
+        song!!.isAlreadyDrawn = false
+        song!!.dateDrawn = null
+        viewModel.updateItem(song!!)
+    }
 }

@@ -9,8 +9,8 @@
         android:id="@+id/song_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="21sp"
         android:paddingLeft="12dp"
+        android:textSize="21sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/song_artist"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,11 +18,11 @@
 
     <TextView
         android:id="@+id/song_artist"
-        android:textSize="18sp"
-        android:paddingLeft="12dp"
-        android:fontFamily="sans-serif-medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:paddingLeft="12dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/song_title"
         tools:text="Artist" />
@@ -30,7 +30,21 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/draw_reset_single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_undo_black_24dp"
+        android:tint="@android:color/black"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@android:color/darker_gray"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

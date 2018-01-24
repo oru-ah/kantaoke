@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import kantaoke.oru.com.kantaoke.R
 import kantaoke.oru.com.kantaoke.data.Song
@@ -13,12 +14,13 @@ import kantaoke.oru.com.kantaoke.data.Song
  * Created by Oru on 19/01/2018.
  */
 class SongAdapter
-internal constructor(context: Context, songs: MutableList<Song>) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
+internal constructor(context: Context, songs: MutableList<Song>, resetListener: ResetListener) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
     private var mSongs: MutableList<Song>? = null
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private var mClickListener: ItemClickListener? = null
     private val mContext: Context = context
+    private val mResetListener: ResetListener = resetListener
 
     init {
         this.mSongs = songs
@@ -30,12 +32,15 @@ internal constructor(context: Context, songs: MutableList<Song>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder!!.titleView.text = mSongs!![position].title
+        holder!!.resetDraw.setOnClickListener { this.mResetListener.onResetClick(holder.itemView) }
+        holder.titleView.text = mSongs!![position].title
         holder.artistView.text = mSongs!![position].artist
         if (mSongs!![position].isAlreadyDrawn) {
             holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.alreadyDrawnSongBackground))
+            holder.resetDraw.visibility = View.VISIBLE
         } else {
             holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.white))
+            holder.resetDraw.visibility = View.GONE
         }
         holder.itemView.tag = mSongs!![position].id
     }
@@ -47,6 +52,7 @@ internal constructor(context: Context, songs: MutableList<Song>) : RecyclerView.
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var titleView: TextView = itemView.findViewById(R.id.song_title)
         internal var artistView: TextView = itemView.findViewById(R.id.song_artist)
+        internal var resetDraw: ImageView = itemView.findViewById(R.id.draw_reset_single)
 
         init {
             itemView.setOnClickListener(this)
@@ -69,5 +75,9 @@ internal constructor(context: Context, songs: MutableList<Song>) : RecyclerView.
 
     interface ItemClickListener {
         fun onItemClick(view: View, position: Int)
+    }
+
+    interface ResetListener {
+        fun onResetClick(view: View)
     }
 }
