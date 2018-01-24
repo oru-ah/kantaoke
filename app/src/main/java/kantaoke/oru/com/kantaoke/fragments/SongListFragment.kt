@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import kantaoke.oru.com.kantaoke.KantaokeApplication
@@ -33,6 +34,7 @@ class SongListFragment : Fragment(), SongAdapter.ResetListener {
     lateinit var layoutManager: LinearLayoutManager
     lateinit var viewModel: SongViewModel
     lateinit var resetDrawsButton: TextView
+    lateinit var fabDialog: AlertDialog
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater!!.inflate(R.layout.song_list_fragment, container, false)
@@ -61,6 +63,27 @@ class SongListFragment : Fragment(), SongAdapter.ResetListener {
             dialogBuilder.setView(dialogView)
             val titleInput = dialogView.findViewById<EditText>(R.id.title_input)
             val artistInput = dialogView.findViewById<EditText>(R.id.artist_input)
+            titleInput.setOnEditorActionListener { p0, p1, p2 ->
+                var handled = false
+                if (p1 == EditorInfo.IME_ACTION_NEXT){
+                    artistInput.requestFocus()
+                    handled = true
+                }
+                handled
+            }
+            artistInput.setOnEditorActionListener { p0, p1, p2 ->
+                var handled = false
+                if (p1 == EditorInfo.IME_ACTION_DONE){
+                    val newSong = Song()
+                    newSong.title = titleInput.text.toString()
+                    newSong.artist = artistInput.text.toString()
+                    newSong.dateModified = Date()
+                    viewModel.addItem(newSong)
+                    fabDialog.dismiss()
+                    handled = true
+                }
+                handled
+            }
             dialogBuilder.setTitle("Aggiungi nuova canzone")
             dialogBuilder.setPositiveButton("Salva") { dialog, whichButton ->
                 val newSong = Song()
@@ -70,7 +93,8 @@ class SongListFragment : Fragment(), SongAdapter.ResetListener {
                 viewModel.addItem(newSong)
             }
             dialogBuilder.setNegativeButton("Annulla") { dialog, i -> }
-            dialogBuilder.show()
+            fabDialog = dialogBuilder.create()
+            fabDialog.show()
         }
 
         resetDrawsButton.setOnClickListener {
