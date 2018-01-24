@@ -5,19 +5,50 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/songs_card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:layout_marginLeft="88dp"
-        android:layout_marginRight="88dp">
+        android:layout_marginRight="88dp"
+        android:layout_marginTop="24dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/songs_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <LinearLayout
+        android:id="@+id/songs_actionbar"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:elevation="2dp"
+        android:gravity="end"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/songs_recycler_view"
+        app:layout_constraintEnd_toEndOf="@id/songs_card_view"
+        app:layout_constraintStart_toStartOf="@id/songs_card_view"
+        app:layout_constraintTop_toTopOf="@id/songs_card_view">
 
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/draw_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:text="Reset estrazioni"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/songs_recycler_view"
+        android:layout_width="0dp"
+        android:elevation="2dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/songs_card_view"
+        app:layout_constraintEnd_toEndOf="@id/songs_card_view"
+        app:layout_constraintStart_toStartOf="@id/songs_card_view"
+        app:layout_constraintTop_toBottomOf="@id/songs_actionbar" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_song_fab"
